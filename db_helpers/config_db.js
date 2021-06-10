@@ -7,10 +7,10 @@ try {
         if (err) {
             throw err.message;
         }
-        console.log('Connected to noterific.db successfully.');
+        console.log(`Connected to ${dbName} successfully.`);
     })
     module.exports = db;
-}
+} 
 catch(error) {
     console.error(error);
 }
