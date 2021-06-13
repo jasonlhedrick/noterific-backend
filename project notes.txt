@@ -1,0 +1,53 @@
+Local account registration
+
+DATA
+--------
+user_id
+username
+hash
+email
+
+Frontend
+function localRegistration(user) {
+axios.post('localhost:9595\register', [username: user.username, email: user.email, password: user.password])
+.then(res => {
+return res;
+})
+.catch(err => {
+return err;
+}}
+
+Backend
+Local registration router
+router.post('\', async (req, res) => {
+user = req.body;
+user.password = await bcrypt.hash(user.password, 15);
+const registrationResult = db.localRegistration(user);
+})
+
+DB Helper
+localRegistration(user) {
+return new Promise((resolve, reject) => {
+	db.run('INSERT INTO users(username, hash, email) VALUES(?, ?, ?)',
+		[user.username, user.password, user.email], (err, res) => {
+		if (err) reject(err);
+		resolve(res);
+	}
+  }
+}
+
+localLogin(user) {
+	const selectUserPromise = new Promise((resolve, reject) => {
+	db.each('SELECT * FROM users WHERE username=?', [user.username], (err, row) => {
+		if (err) reject(err);
+		resolve(row);
+	}
+	const getUser = await selectUserPromise;
+	const checkHash = await hashHelper.checkHash(user.pass, getUser.hash);
+	if (checkHash) {
+		return {user_id: selectUser.user_id, username: selectUser.username, email: selectUser.email}
+	}
+	return {error: 'Username or password not matched.};
+}
+}
+

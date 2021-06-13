@@ -1,9 +1,7 @@
 const router = require('express').Router();
 
-router.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Server listening for oAuth registration.',
-    });
+router.get('/', function (req, res, next) {
+    res.status(200).json({message: '/registration/oauth endpoint listening.'});
 });
 
 module.exports = router;
