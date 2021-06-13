@@ -1,7 +1,6 @@
 const oauth = require('express').Router();
 
-
-oauth.get('/', function(res, res, next) {
+oauth.get('/', function (req, res) {
     res.status(200).json({message: '/oauth endpoint listening.'});
 })
 

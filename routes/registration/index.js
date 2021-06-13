@@ -5,8 +5,6 @@ registration.get('/', function(req, res) {
     res.status(200).json({message: '/registration endpoint listening.'})
 });
 
-registration.use('/oauth', function(req, res, next) {
-    next();
-}, oauth)
+registration.use('/oauth', oauth);
 
-module.exports = registration;
+module.exports = registration
