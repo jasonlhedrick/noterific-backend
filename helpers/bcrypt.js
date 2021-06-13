@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
  * @param {string} password The password to use to create the hash.
  * @returns {string} The hashed value.
  */
-async function hashPassword(password) {
+async function hash(password) {
     try {
         return await bcrypt.hash(password, 15);
     }
@@ -20,7 +20,7 @@ async function hashPassword(password) {
  * @param {string} hash The hash to be checked against.
  * @returns {Boolean} true or false
  */
-async function verifyHash(password, hash) {
+async function verify(password, hash) {
     try {
         return await bcrypt.compare(password, hash);
     }
@@ -30,6 +30,6 @@ async function verifyHash(password, hash) {
 }
 
 module.exports = {
-    hashPassword,
-    verifyHash,
+    hash,
+    verify,
 }
