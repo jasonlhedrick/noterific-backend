@@ -1,4 +1,4 @@
-const db = require('./db_helpers/config_db');
+const db = require('./config_db');
 
 async function createTable() {
     return new Promise((resolve, reject) => {
@@ -16,9 +16,9 @@ async function createTable() {
     });
 }
 
-async function truncateTable() {
+async function dropTable() {
     return new Promise((resolve, reject) => {
-        db.run('TRUNCATE TABLE notes', (err) => {
+        db.run('DROP TABLE notes', (err) => {
             if (err) reject(err);
             resolve(true);
         });
@@ -36,6 +36,6 @@ async function add(note) {
 
 module.exports = {
     createTable,
-    truncateTable,
+    dropTable,
     add,
 }

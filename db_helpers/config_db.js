@@ -8,7 +8,7 @@ const db = new sqlite3.Database(`../db/${testDBName}`, (err) => {
         console.error(err);
         throw err;
     }
-    console.log(`Connected to ${testDBName}`);
+    //console.log(`Connected to ${testDBName}`);
 });
 
 module.exports = db;

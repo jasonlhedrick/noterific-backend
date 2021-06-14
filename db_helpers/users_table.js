@@ -22,7 +22,7 @@ async function truncateTable() {
     })
 }
 
-async function add(user) {
+async function insert(user) {
     return new Promise((resolve, reject) => {
         db.each('INSERT INTO users(email, hash) VALUES(?, ?)', [user.email, user.hash], (err, row) => {
             if (err) reject(err);
@@ -31,7 +31,7 @@ async function add(user) {
     });
 }
 
-async function getById(id) {
+async function selectById(id) {
     return new Promise((resolve, reject) => {
         db.each('SELECT * FROM users WHERE user_id = ?', [id], (err, row) => {
             if (err) reject(err);
@@ -40,7 +40,7 @@ async function getById(id) {
     });
 }
 
-async function getByEmail(email) {
+async function selectByEmail(email) {
     return new Promise((resolve, reject) => {
         db.each('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
             if (err) reject(err);
@@ -52,7 +52,7 @@ async function getByEmail(email) {
 module.exports = {
     createTable,
     truncateTable,
-    add,
-    getById,
-    getByEmail,
+    insert,
+    selectById,
+    selectByEmail,
 }
