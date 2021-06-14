@@ -1,34 +1,58 @@
-const db = require('./db_helpers/config_db');
+const db = require('./config_db');
 
-function localRegistration(user) {
+async function createTable() {
+    return new Promise((resolve, reject) => {
+        db.run(`CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE NOT NULL,
+            hash TEXT UNIQUE NOT NULL,
+            failed_login_attempts INTEGER)`, (err, res) => {
+                if (err) reject(err);
+                resolve(res);
+            });
+    });
+};
 
+async function truncateTable() {
+    return new Promise((resolve, reject) => {
+        db.run('TRUNCATE TABLE users', (err, res) => {
+            if (err) reject(err);
+            resolve(res);
+        })
+    })
 }
 
-function oauthRegistration(user) {
-
+async function add(user) {
+    return new Promise((resolve, reject) => {
+        db.each('INSERT INTO users(email, hash) VALUES(?, ?)', [user.email, user.hash], (err, row) => {
+            if (err) reject(err);
+            resolve(row);
+        });
+    });
 }
 
-function localLogin(user) {
-
+async function getById(id) {
+    return new Promise((resolve, reject) => {
+        db.each('SELECT * FROM users WHERE user_id = ?', [id], (err, row) => {
+            if (err) reject(err);
+            resolve(row);
+        });
+    });
 }
 
-function oauthLogin(user) {
-
-}
-
-function getUserById(id) {
-
-}
-
-function getUserByUsername(username) {
-
+async function getByEmail(email) {
+    return new Promise((resolve, reject) => {
+        db.each('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
+            if (err) reject(err);
+            resolve(row);
+        })
+    })
 }
 
 module.exports = {
-    localRegistration,
-    oauthRegistration,
-    localLogin,
-    oauthLogin,
-    getUserById,
-    getUserByUsername,
+    createTable,
+    truncateTable,
+    add,
+    getById,
+    getByEmail,
 }
