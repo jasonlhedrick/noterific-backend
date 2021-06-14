@@ -1,11 +1,12 @@
 const jwt = require('jsonwebtoken');
+const secret = 'lamesecretuntilipullfrom.env';
 
-function signToken(id) {
-
+async function signToken(id) {
+    return await jwt.sign(id, secret);
 }
 
-function verifyToken(token) {
-
+async function verifyToken(token) {
+    return await jwt.verify(token, secret);
 }
 
 module.exports = {

@@ -1,5 +1,7 @@
 const login = require('express').Router();
 const oauth = require('./oauth');
+const bcrypt = require('../../helpers/bcrypt');
+const jwt = require('../../helpers/jwt');
 
 login.use('/oauth', oauth);
 
