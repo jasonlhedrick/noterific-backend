@@ -12,9 +12,23 @@ registration.post('/', async function(req, res) {
     const user = req.body;
     if (user.email && user.password) {
         try {
-            const hash = await bcrypt.hash(user.pass);
-            const user_id = await users.add({email: user.email, hash: hash});
-            
+            const hash = await bcrypt.hash(user.password);
+            const addedUser = await users.insert({email: user.email, hash: hash});
+            if (addedUser.code) {
+                // Tried pulling in a helper file with an sql error code constant and it caused the API tester Insomnia to hang.
+                // 23505 === unique constraint already exists. email is the only unique constraint in this table.
+                if (addedUser.code === '23505') {
+                    res.status(409).json({
+                        message: 'email already exists',
+                        code: addedUser.code,
+                        detail: addedUser.detail,
+                    })
+                }
+            }
+            else {
+                const token = await jwt.sign(addedUser.rows[0].user_id);
+                res.status(200).json({token: token});
+            }
         }
         catch(error) {
             console.error(error);

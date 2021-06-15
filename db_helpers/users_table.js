@@ -1,58 +1,45 @@
 const db = require('./config_db');
 
-async function createTable() {
-    return new Promise((resolve, reject) => {
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE NOT NULL,
-            hash TEXT UNIQUE NOT NULL,
-            failed_login_attempts INTEGER)`, (err, res) => {
-                if (err) reject(err);
-                resolve(res);
-            });
-    });
-};
-
 async function truncateTable() {
-    return new Promise((resolve, reject) => {
-        db.run('TRUNCATE TABLE users', (err, res) => {
-            if (err) reject(err);
-            resolve(res);
-        })
-    })
+    try {
+        return await db.query('TRUNCATE TABLE users RESTART IDENTITY CASCADE');
+    }
+    catch(err) {
+        console.error(err.stack);
+        return err;
+    }
 }
 
-async function add(user) {
-    return new Promise((resolve, reject) => {
-        db.each('INSERT INTO users(email, hash) VALUES(?, ?)', [user.email, user.hash], (err, row) => {
-            if (err) reject(err);
-            resolve(row);
-        });
-    });
+async function insert(user) {
+    try {
+        return await db.query(`INSERT INTO users(email, hash) VALUES($1, $2) RETURNING  user_id, email`, [user.email, user.hash]);
+    }
+    catch(err) {
+        return err;
+    }
 }
 
-async function getById(id) {
-    return new Promise((resolve, reject) => {
-        db.each('SELECT * FROM users WHERE user_id = ?', [id], (err, row) => {
-            if (err) reject(err);
-            resolve(row);
-        });
-    });
+async function selectByID(id) {
+    try {
+        return await db.query('SELECT * FROM users WHERE user_id=$1', [id]);
+    }
+    catch(err) {
+        return err;
+    }
 }
 
-async function getByEmail(email) {
-    return new Promise((resolve, reject) => {
-        db.each('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
-            if (err) reject(err);
-            resolve(row);
-        })
-    })
+async function selectByEmail(email) {
+    try {
+        return await db.query('SELECT * FROM users WHERE email=$1', [email]);
+    }
+    catch(err) {
+        return err;
+    }
 }
 
 module.exports = {
-    createTable,
     truncateTable,
-    add,
-    getById,
-    getByEmail,
+    insert,
+    selectByID,
+    selectByEmail,
 }
