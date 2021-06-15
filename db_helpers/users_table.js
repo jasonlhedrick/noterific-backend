@@ -11,8 +11,9 @@ async function truncateTable() {
 }
 
 async function insert(user) {
+    const query = 'INSERT INTO users(email, hash) VALUES($1, $2) RETURNING  user_id, email';
     try {
-        return await db.query(`INSERT INTO users(email, hash) VALUES($1, $2) RETURNING  user_id, email`, [user.email, user.hash]);
+        return await db.query(query, [user.email, user.hash]);
     }
     catch(err) {
         return err;
@@ -20,8 +21,9 @@ async function insert(user) {
 }
 
 async function selectByID(id) {
+    const query = 'SELECT * FROM users WHERE user_id=$1';
     try {
-        return await db.query('SELECT * FROM users WHERE user_id=$1', [id]);
+        return await db.query(query, [id]);
     }
     catch(err) {
         return err;
@@ -29,8 +31,9 @@ async function selectByID(id) {
 }
 
 async function selectByEmail(email) {
+    const query = 'SELECT * FROM users WHERE email=$1'
     try {
-        return await db.query('SELECT * FROM users WHERE email=$1', [email]);
+        return await db.query(query, [email]);
     }
     catch(err) {
         return err;
