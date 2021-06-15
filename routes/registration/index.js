@@ -2,7 +2,7 @@ const registration = require('express').Router();
 const oauth = require('./oauth');
 const bcrypt = require('../../helpers/bcrypt');
 const jwt = require('../../helpers/jwt');
-const users = require('../../db_helpers/users_table');
+const usersTable = require('../../db_helpers/users_table');
 
 registration.get('/', function(req, res) {
     res.status(200).json({message: '/registration endpoint listening.'})
@@ -13,7 +13,7 @@ registration.post('/', async function(req, res) {
     if (user.email && user.password) {
         try {
             const hash = await bcrypt.hash(user.password);
-            const addedUser = await users.insert({email: user.email, hash: hash});
+            const addedUser = await usersTable.insert({email: user.email, hash: hash});
             if (addedUser.code) {
                 // Tried pulling in a helper file with an sql error code constant and it caused the API tester Insomnia to hang.
                 // 23505 === unique constraint already exists. email is the only unique constraint in this table.
