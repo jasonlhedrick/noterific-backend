@@ -8,7 +8,10 @@ notes.get('/', verify, async function (req, res) {
     res.status(200).json({notes: userNotes.rows})
 });
 
-notes.post('/')
+notes.post('/', verify, async function (req, res) {
+    const body = req.body;
+    res.status(200).json(body);
+});
 
 
 module.exports = notes;

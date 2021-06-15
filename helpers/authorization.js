@@ -5,7 +5,7 @@ async function authorize(req, res, next) {
         const token = req.headers.authorization.split(' ')[1];
         try {
             const userID = await jwt.verify(token);
-            req.body = {userID}
+            req.body = {...req.body, userID}
             next();
         }
         catch(error) {
