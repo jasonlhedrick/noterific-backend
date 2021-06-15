@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
-const secret = 'lamesecretuntilipullfrom.env';
+const secret = process.env.JWTSECRET;
 
-async function signToken(id) {
+async function sign(id) {
     return await jwt.sign(id, secret);
 }
 
-async function verifyToken(token) {
+async function verify(token) {
     return await jwt.verify(token, secret);
 }
 
 module.exports = {
-    signToken,
-    verifyToken
+    sign,
+    verify
 }

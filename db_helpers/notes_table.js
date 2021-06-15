@@ -1,7 +1,7 @@
 const db = require('./config_db');
 
 async function createTable() {
-
+    
 }
 
 async function dropTable() {
