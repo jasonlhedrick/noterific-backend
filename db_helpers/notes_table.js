@@ -1,13 +1,5 @@
 const db = require('./config_db');
 
-async function createTable() {
-    
-}
-
-async function dropTable() {
-    
-}
-
 async function add(note, user_id) {
     const query = 'INSERT INTO notes(title, body, user_id) VALUES($1, $2, $3) RETURNING note_id';
     try {
@@ -29,8 +21,6 @@ async function selectByUserID(user_id) {
 }
 
 module.exports = {
-    createTable,
-    dropTable,
     add,
     selectByUserID,
 }
