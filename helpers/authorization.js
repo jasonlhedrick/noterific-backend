@@ -1,6 +1,6 @@
 const jwt = require('./jwt');
 
-async function authorize(req, res, next) {
+async function verify(req, res, next) {
     if (req.headers.authorization) {
         const token = req.headers.authorization.split(' ')[1];
         try {
@@ -17,4 +17,4 @@ async function authorize(req, res, next) {
     }
 }
 
-module.exports = authorize;
+module.exports = verify;
