@@ -5,14 +5,22 @@ const notesTable = require('../../db_helpers/notes_table');
 notes.get('/', verify, async function (req, res) {
     const userID = req.body.userID;
     const userNotes = await notesTable.selectByUserID(userID);
+
     res.status(200).json({notes: userNotes.rows})
 });
 
 notes.post('/', verify, async function (req, res) {
     const note = {title: req.body.title, body: req.body.body}
     const userID = req.body.userID;
-    const updatedRow = await notesTable.add(note, userID)
-    res.status(201).json(updatedRow.rows);
+
+    if (note.title && note.body) {
+        const updatedRow = await notesTable.add(note, userID)
+        res.status(201).json(updatedRow.rows);
+    }
+    else {
+        res.status(400).json({message: 'Adding a note requires both a title and body'});
+    }
+    
 });
 
 notes.put('/:note_id', verify, async function (req, res) {
@@ -21,9 +29,11 @@ notes.put('/:note_id', verify, async function (req, res) {
 
     if (note.title && note.body) {
         const checkNoteUserID = await notesTable.selectByNoteID(note.id);
-
+        if (checkNoteUserID.rows.length === 0) {
+            res.status(410).json({message: `Note id: ${note.id} not found.`});
+        }
         // Ensure this note ID is owned by the session token's userID.
-        if (checkNoteUserID.rows[0].user_id.toString() === userID) {
+        else if (checkNoteUserID.rows[0].user_id.toString() === userID) {
             const updatedNote = await notesTable.updateByNoteID(note);
             if (updatedNote.command === 'UPDATE') {
                 res.status(200).json({message: 'Note updated successfully.', note_id: note.id});
