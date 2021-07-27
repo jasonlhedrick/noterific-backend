@@ -15,8 +15,6 @@ registration.post('/', async function(req, res) {
             const hash = await bcrypt.hash(user.password);
             const addedUser = await usersTable.insert({email: user.email, hash: hash});
             if (addedUser.code) {
-                // Tried pulling in a helper file with an sql error code constant and it caused the API tester Insomnia to hang.
-                // 23505 === unique constraint already exists. email is the only unique constraint in this table.
                 if (addedUser.code === '23505') {
                     res.status(409).json({
                         message: 'email already exists',
