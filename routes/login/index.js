@@ -13,7 +13,7 @@ login.get('/', function(req, res) {
 
 login.post('/', async function(req, res) {
     const requestingUser = req.body;
-
+    
     if (requestingUser.email && requestingUser.password) {
         try {
             const user = await usersTable.selectByEmail(requestingUser.email);
