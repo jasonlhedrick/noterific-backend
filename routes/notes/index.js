@@ -58,7 +58,7 @@ notes.delete('/:note_id', verify, async function(req, res) {
     else {
         if (checkNoteUserID.rows[0].user_id.toString() === userID) {
             const deleteNote = await notesTable.deleteByNoteID(noteID);
-            console.log(deleteNote);
+            
             if (deleteNote.command === 'DELETE') {
                 res.status(200).json({message: `Note id: ${noteID} successfully deleted.`});
             }
