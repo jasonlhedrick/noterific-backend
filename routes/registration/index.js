@@ -11,8 +11,6 @@ registration.get('/', function(req, res) {
 
 registration.post('/', async function(req, res) {
     const user = req.body;
-    res.status(200).json(db);
-    return;
     if (user.email && user.password) {
         try {
             const hash = await bcrypt.hash(user.password);
