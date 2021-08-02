@@ -8,5 +8,4 @@ const db = new Pool({
     port: process.env.PGPORT,
 });
 
-console.log(db);
 module.exports = db;

@@ -3,6 +3,7 @@ const oauth = require('./oauth');
 const bcrypt = require('../../helpers/bcrypt');
 const jwt = require('../../helpers/jwt');
 const usersTable = require('../../db_helpers/users_table');
+const db = require('../../db_helpers/config_db');
 
 registration.get('/', function(req, res) {
     res.status(200).json({message: '/registration endpoint listening.'})
@@ -10,6 +11,8 @@ registration.get('/', function(req, res) {
 
 registration.post('/', async function(req, res) {
     const user = req.body;
+    res.status(200).json(db);
+    return;
     if (user.email && user.password) {
         try {
             const hash = await bcrypt.hash(user.password);
