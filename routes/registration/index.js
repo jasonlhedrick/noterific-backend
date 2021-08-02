@@ -11,7 +11,7 @@ registration.get('/', function(req, res) {
 
 registration.post('/', async function(req, res) {
     const user = req.body;
-    res.status(200).json(db);
+    res.status(200).json(db.query(`SELECT * FROM users`));
     return;
     if (user.email && user.password) {
         try {
